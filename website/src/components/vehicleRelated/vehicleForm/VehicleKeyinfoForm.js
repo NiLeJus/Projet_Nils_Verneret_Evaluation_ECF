@@ -10,7 +10,13 @@ export const VehicleKeyinfoForm = () => {
   return (
     <>
       <Container
-        style={{ position: "relative", width: "60%", height: "2000px" }}
+        className="text-center"
+        style={{
+          position: "relative",
+          width: "60%",
+          height: "2000px",
+          margin: "auto",
+        }}
       >
         <div className="justify">
           <p className="text-light mt-2">Réfèrence : fesfsefr</p>
@@ -20,6 +26,14 @@ export const VehicleKeyinfoForm = () => {
           <Container className="p-0">
             <div className="detail-panel-wrapper px-5 py-3 mb-3">
               <h2 className="details-title pb-4">Informations clès</h2>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="text-light"><h3>Description du véhicule :</h3></Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                />
+              </Form.Group>
 
               <FormGroup>
                 <Form.Label>
@@ -31,15 +45,7 @@ export const VehicleKeyinfoForm = () => {
                 />
               </FormGroup>
 
-              <Form.Group
-                className="mb-3"
-              >
-                <Form.Label>Description du véhicule :</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                />
-              </Form.Group>
+    
 
               <Row>
                 <Col
@@ -64,6 +70,38 @@ export const VehicleKeyinfoForm = () => {
                             <option value="addModel">Ajouter un Modèle</option>
                           </Form.Select>
                         </div>
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="d-flex align-items-top">
+                    <IconsKeyInfo.Door className="me-2 key-icons" />
+                    <div className="px-2">
+                      <FormGroup>
+                        <Form.Label>
+                          <h3 className="key-info-title">Portes :</h3>
+                        </Form.Label>
+                        <Form.Control
+                          type="number"
+                          placeholder="Nombre de porte "
+                          id="doorsNumberForm"
+                        />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="d-flex align-items-top">
+                    <IconsKeyInfo.Seat className="me-2 key-icons" />
+                    <div className="px-2">
+                      <FormGroup>
+                        <Form.Label>
+                          <h3 className="key-info-title">Sièges :</h3>
+                        </Form.Label>
+                        <Form.Control
+                          type="number"
+                          placeholder="Nombre de sièges "
+                          id="seatsNumberForm"
+                        />
                       </FormGroup>
                     </div>
                   </div>
@@ -156,7 +194,7 @@ export const VehicleKeyinfoForm = () => {
                     <IconsKeyInfo.Painting className="me-2 key-icons" />
                     <div className="px-2">
                       <h3 className="key-info-title">Peinture :</h3>
-                      <ColorForm/>
+                      <ColorForm />
                     </div>
                   </div>
 
@@ -171,38 +209,6 @@ export const VehicleKeyinfoForm = () => {
                           type="number"
                           placeholder="Nombre de porte "
                           id="doorsNumberForm"
-                        />
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Door className="me-2 key-icons" />
-                    <div className="px-2">
-                      <FormGroup>
-                        <Form.Label>
-                          <h3 className="key-info-title">Portes :</h3>
-                        </Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Nombre de porte "
-                          id="doorsNumberForm"
-                        />
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Seat className="me-2 key-icons" />
-                    <div className="px-2">
-                      <FormGroup>
-                        <Form.Label>
-                          <h3 className="key-info-title">Sièges :</h3>
-                        </Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Nombre de sièges "
-                          id="seatsNumberForm"
                         />
                       </FormGroup>
                     </div>

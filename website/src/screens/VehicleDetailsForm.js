@@ -12,9 +12,7 @@ import VehicleTypeForm from "../components/vehicleRelated/vehicleForm/keyInfosFo
 import OptionsForm from "../components/vehicleRelated/vehicleForm/keyInfosForm/OptionsForm.js";
 import VehicleConditionForm from "../components/vehicleRelated/vehicleForm/keyInfosForm/VehicleConditionForm.js";
 import { FormGroup } from "react-bootstrap";
-import {
-  addNewVehicle,
-} from "../serverRelated/ApiRequest.js";
+import { addNewVehicle } from "../serverRelated/ApiRequest.js";
 import { Button } from "react-bootstrap";
 
 export const VehicleDetailsForm = () => {
@@ -62,7 +60,7 @@ export const VehicleDetailsForm = () => {
 
   const handleRegisterRelOptionsVehicles = async (vehicleId, optionsId) => {
     console.log("Envoi des options:", optionsId); // Afficher les options à envoyer
-  }
+  };
 
   const handleSendPhotos = async (vehicleId) => {
     console.log("Envoi des photos:", photos); // Afficher les photos à envoyer
@@ -71,7 +69,6 @@ export const VehicleDetailsForm = () => {
       formData.append("photo", photo);
     });
     formData.append("vehicle_id", vehicleId); // En dehors de la boucle
-    
 
     try {
       const response = await fetch("http://localhost:5001/api/photos", {
@@ -141,13 +138,13 @@ export const VehicleDetailsForm = () => {
       ...prevData,
       Vehicle: {
         ...prevData.Vehicle,
-        transmission_id: selectedTransmission, // Mise à jour de transmission_id
+        transmission_id: selectedTransmission, 
       },
     }));
   };
 
   const handleFuelTypeChange = (selectedFuelType) => {
-    console.log("Type de carburant sélectionné:", selectedFuelType); // Afficher le type de carburant sélectionné
+    console.log("Type de carburant sélectionné:", selectedFuelType); 
     setVehicleData((prevData) => ({
       ...prevData,
       Vehicle: {
@@ -203,9 +200,12 @@ export const VehicleDetailsForm = () => {
     try {
       const response = await addNewVehicle(vehicleData);
       if (response && response.id) {
-        const newVehicleId = response.id; 
+        const newVehicleId = response.id;
         setVehicleId(newVehicleId);
-        handleRegisterRelOptionsVehicles(newVehicleId, vehicleData.Vehicle.Options);
+        handleRegisterRelOptionsVehicles(
+          newVehicleId,
+          vehicleData.Vehicle.Options
+        );
         handleSendPhotos(newVehicleId);
       } else {
         console.error("Réponse inattendue de l'API", response);
@@ -275,7 +275,7 @@ export const VehicleDetailsForm = () => {
       ...prevData,
       Vehicle: {
         ...prevData.Vehicle,
-        vehicle_type_id: selectedType, // Assurez-vous que cette propriété est correcte selon votre modèle de données
+        vehicle_type_id: selectedType,
       },
     }));
   };
@@ -285,13 +285,13 @@ export const VehicleDetailsForm = () => {
       ...prevData,
       Vehicle: {
         ...prevData.Vehicle,
-        vehicle_condition_id: selectedCondition, // Assurez-vous que cette propriété est correcte selon votre modèle de données
+        vehicle_condition_id: selectedCondition, 
       },
     }));
   };
 
   const handleModelChange = (selectedModel) => {
-    setSelectedModel(selectedModel); // Mise à jour de l'état local pour le modèle sélectionné
+    setSelectedModel(selectedModel);
     setVehicleData((prevData) => ({
       ...prevData,
       Vehicle: {
@@ -310,161 +310,186 @@ export const VehicleDetailsForm = () => {
   return (
     <>
       <Container
-        style={{ position: "relative", width: "39%", height: "2000px" }}
+        style={{
+          position: "relative",
+          width: "55%",
+          height: "auto",
+          margin: "auto",
+        }}
       >
-        <div className="d-flex justify-content-center mt-2">
+        <div className="d-flex justify-content-center mt-2 m-auto">
           <Container className="p-0">
             <div className="detail-panel-wrapper px-5 py-3 mb-3">
               <h2 className="details-title pb-4">Informations clès</h2>
 
               <Row id="key-info-wrapper">
-            
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Factory className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Marque et modèle :</h3>
-                      <BrandForm onBrandChange={handleBrandChange} /> -{" "}
-                      <ModelForm
-                        brand_id={selectedBrand?.value}
-                        onModelChange={handleModelChange}
-                      />
-                    </div>
-                  </div>
-
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlTextarea1"
-                  >
-                    <Form.Label>Commentaire sur le vehicule</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      onChange={handleVehicleCommentChange}
-                    />
-                  </Form.Group>
-
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                >
+                  <Form.Label className="key-info-title">
+                    <h3 className="key-info-title">
+                      Commentaire sur levéhicule :
+                    </h3>
+                  </Form.Label>
                   <Form.Control
+                    as="textarea"
+                    rows={3}
+                    onChange={handleVehicleCommentChange}
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label className="key-info-title">
+                    <h3 className="key-info-title">Etat du véhicule :</h3>
+                  </Form.Label>
+                  <VehicleConditionForm
+                    onConditionChange={handleConditionChange}
+                  />
+                </Form.Group>
+
+
+                <div className=" mb-5">
+                  <Form.Label className="key-info-title">
+                    <h3 className="key-info-title">Prix :</h3>
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-5"
                     type="number"
                     placeholder="Prix"
                     id="priceForm"
                     onChange={handlePriceChange}
                   />
-
-                  <VehicleConditionForm
-                    onConditionChange={handleConditionChange}
-                  />
-
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Key className="me-2 key-icons" />
-                    <div className="px-2">
-                      <FormGroup>
-                        <Form.Label>
-                          <h3 className="key-info-title">
-                            Mise en circulation :
-                          </h3>
-                        </Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Année de mise en circulation"
-                          onChange={handleProductionYearChange}
-                        />
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Mileage className="me-2 key-icons" />
-                    <div className="px-2">
-                      <FormGroup>
-                        <Form.Label>
-                          <h3 className="key-info-title">Kilomètrage :</h3>
-                        </Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Kilometrage"
-                          id="mileageForm"
-                          onChange={handleMileageChange}
-                        />
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Fuel className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Carburant :</h3>
-                      <FuelForm onFuelChange={handleFuelTypeChange} />
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Transmission className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Transmission :</h3>
-                      <TransmissionForm
-                        onTransmissionChange={handleTransmissionChange}
-                      />
-                    </div>
-                  </div>
-               
-
+                </div>
+                   
                 <Col
                   xs={12}
                   md={6}
                   className="px-4"
                 >
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Stars className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Types :</h3>
-                      <VehicleTypeForm onTypeChange={handleVehicleTypeChange} />
-                    </div>
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Mileage className="me-2 key-icons" />
+                  <div className="px-2">
+                    <FormGroup>
+                      <Form.Label>
+                        <h3 className="key-info-title">Kilomètrage :</h3>
+                      </Form.Label>
+                      <Form.Control
+                        type="number"
+                        placeholder="Kilometrage"
+                        id="mileageForm"
+                        onChange={handleMileageChange}
+                      />
+                    </FormGroup>
                   </div>
+                </div>
+            
 
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Painting className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Peinture :</h3>
-                      <ColorForm onColorChange={handleColorChange} />
-                    </div>
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Factory className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Marque et modèle :</h3>
+                    <BrandForm onBrandChange={handleBrandChange} /> 
+                    <ModelForm
+                      brand_id={selectedBrand?.value}
+                      onModelChange={handleModelChange}
+                    />
                   </div>
+                </div>
 
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.HorsePower className="me-2 key-icons" />
-                    <div className="px-2">
-                      <FormGroup>
-                        <Form.Label>
-                          <h3 className="key-info-title">Chevaux Fiscaux :</h3>
-                        </Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Chevaux Fiscaux "
-                          id="tax_horsepower"
-                          onChange={handleTaxHorsePowerChange}
-                        />
-                      </FormGroup>
-                    </div>
+                <div className="d-flex align-items-top  mb-2">
+                  <IconsKeyInfo.Door className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Portes :</h3>
+                    <p className="key-info">
+                      {vehicleData.Vehicle.VehicleModel.door_number}
+                    </p>
                   </div>
+                </div>
 
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Door className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Portes :</h3>
-                      <p className="key-info">
-                        {vehicleData.Vehicle.VehicleModel.door_number}
-                      </p>
-                    </div>
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Seat className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Sièges :</h3>
+                    <p className="key-info">
+                      {vehicleData.Vehicle.VehicleModel.seat_number}
+                    </p>
                   </div>
+                </div>
 
-                  <div className="d-flex align-items-top">
-                    <IconsKeyInfo.Seat className="me-2 key-icons" />
-                    <div className="px-2">
-                      <h3 className="key-info-title">Sièges :</h3>
-                      <p className="key-info">
-                        {vehicleData.Vehicle.VehicleModel.seat_number}
-                      </p>
-                    </div>
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Key className="me-2 key-icons" />
+                  <div className="px-2">
+                    <FormGroup>
+                      <Form.Label>
+                        <h3 className="key-info-title">
+                          Mise en circulation :
+                        </h3>
+                      </Form.Label>
+                      <Form.Control
+                        type="number"
+                        placeholder="Année de mise en circulation"
+                        onChange={handleProductionYearChange}
+                      />
+                    </FormGroup>
                   </div>
+                </div>
+              </Col>
+              <Col
+                  xs={12}
+                  md={6}
+                  className="px-4"
+                >
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Fuel className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Carburant :</h3>
+                    <FuelForm onFuelChange={handleFuelTypeChange} />
+                  </div>
+                </div>
+
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Transmission className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Transmission :</h3>
+                    <TransmissionForm
+                      onTransmissionChange={handleTransmissionChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Stars className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Types :</h3>
+                    <VehicleTypeForm onTypeChange={handleVehicleTypeChange} />
+                  </div>
+                </div>
+
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.Painting className="me-2 key-icons" />
+                  <div className="px-2">
+                    <h3 className="key-info-title">Peinture :</h3>
+                    <ColorForm onColorChange={handleColorChange} />
+                  </div>
+                </div>
+
+                <div className="d-flex align-items-top mb-5">
+                  <IconsKeyInfo.HorsePower className="me-2 key-icons" />
+                  <div className="px-2">
+                    <FormGroup>
+                      <Form.Label>
+                        <h3 className="key-info-title">Chevaux Fiscaux :</h3>
+                      </Form.Label>
+                      <Form.Control
+                        type="number"
+                        placeholder="Chevaux Fiscaux "
+                        id="tax_horsepower"
+                        onChange={handleTaxHorsePowerChange}
+                      />
+                    </FormGroup>
+                  </div>
+                </div>
                 </Col>
               </Row>
             </div>
@@ -473,42 +498,23 @@ export const VehicleDetailsForm = () => {
 
               <OptionsForm onOptionsChange={handleOptionsChange} />
               <Row>
-                <Col
-                  xs={12}
-                  md={6}
-                  className="px-4"
+                <Form.Group
+                  controlId="formFile"
+                  className="mb-3"
                 >
-                  <div className="d-flex align-items-top"></div>
-                </Col>
-
-                <Col
-                  xs={12}
-                  md={6}
-                  className="px-4"
-                >
-                  <div className="d-flex align-items-top"></div>
-                </Col>
-                
-          <Form.Group
-        controlId="formFile"
-        className="mb-3"
-      >
-        <Form.Label>Sélectionnez plusieurs fichiers</Form.Label>
-        <Form.Control
-          type="file"
-          multiple
-          onChange={handlePhotosChange}
-        />
-      </Form.Group>
+                  <Form.Label> <h3 className="key-info-title">Ajouter des photos</h3></Form.Label>
+                  <Form.Control
+                    type="file"
+                    multiple
+                    onChange={handlePhotosChange}
+                  />
+                </Form.Group>
               </Row>
             </div>
           </Container>
-
         </div>
         <Button onClick={handleAddNewVehicle}>Ajouter un véhicule</Button>
       </Container>
-
-     
     </>
   );
 };
