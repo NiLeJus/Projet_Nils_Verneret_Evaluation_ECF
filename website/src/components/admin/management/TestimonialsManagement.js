@@ -131,6 +131,9 @@ export const TestimonialsManagement = () => {
           >
             Ajouter un nouveau témoignage
           </Button>
+
+          <p className="text-light">Liens à envoyer aux utilisateurs pour laisse un avis</p>
+          <p>http://localhost:3000/leaveTestimony</p>
         </div>
       </div>
       <Table

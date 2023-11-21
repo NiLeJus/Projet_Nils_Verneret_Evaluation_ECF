@@ -57,7 +57,7 @@ router.get('/byBrand/:brandId', async (req, res) => {
     });
 
     if (vehicleModels.length === 0) {
-      return res.status(404).send('Aucun modèle trouvé pour cette marque');
+      return res.status(200).json([]); // Modifié pour renvoyer un tableau vide
     }
 
     res.json(vehicleModels);

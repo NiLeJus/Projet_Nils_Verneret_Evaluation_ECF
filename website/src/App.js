@@ -7,6 +7,7 @@ import { VehicleDetails } from "./screens/VehicleDetails";
 import { ReactComponent as Logo } from "./visuals/brand/LOGO_Motor.svg";
 import { FooterComp } from "../src/components/general/FooterComp";
 import { VehicleDetailsForm } from "./screens/VehicleDetailsForm";
+import { UserLeaveATestimony } from "./screens/UserLeaveATestimony";
 
 import "./styles/main.css";
 import { Routes, Route, NavLink } from "react-router-dom";
@@ -82,6 +83,11 @@ function App() {
             <Route
               path="/vehicleForm"
               element={<VehicleDetailsForm />}
+            />
+
+            <Route 
+             path="/leaveTestimony"
+             element={<UserLeaveATestimony/>}
             />
           </Routes>
         </div>

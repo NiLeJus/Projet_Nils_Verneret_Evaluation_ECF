@@ -10,7 +10,6 @@ router.post('/login', async (req, res) => {
       console.log(req.body);
       const { email, password } = req.body;
       
-      // Recherche de l'admin par email
       const admin = await Admin.findOne({ where: { email } });
   
       if (!admin) {
@@ -25,7 +24,6 @@ router.post('/login', async (req, res) => {
         // Si les mots de passe correspondent
         res.json({ message: 'Validation réussie', name: admin.name });
       } else {
-        // Si les mots de passe ne correspondent pas
         res.status(401).json({ message: 'Mot de passe incorrect' });
       }
     } catch (error) {

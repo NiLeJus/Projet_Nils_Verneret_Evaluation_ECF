@@ -16,12 +16,11 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { name, description, min_price } = req.body;
-    console.log('Received data:', name, description, min_price); // Logging pour déboguer
+    console.log('Received data:', name, description, min_price); 
 
-    // Ici, ajoutez votre logique pour insérer les données dans la base de données
     const newService = await Service.create({ name, description, min_price });
 
-    res.status(201).json(newService); // Renvoyer le service créé
+    res.status(201).json(newService); 
   } catch (error) {
     res.status(500).send(error.message);
   }
