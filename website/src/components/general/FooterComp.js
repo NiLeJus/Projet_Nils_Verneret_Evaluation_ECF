@@ -10,7 +10,7 @@ export const FooterComp = () => {
   const [showConnexionModal, setShowConnexionModal] = useState(false);
 
   useEffect(() => {
-    const getGarageData = async () => {
+    const handleGetGarageData = async () => {
       try {
         const data = await fetchGarage();
         setGarage(data);
@@ -19,7 +19,7 @@ export const FooterComp = () => {
       }
     };
 
-    getGarageData();
+    handleGetGarageData();
   }, []);
 
   const handleOpenConnexionModal = () => setShowConnexionModal(true);

@@ -8,10 +8,10 @@ import { serverUrl } from "../../serverRelated/ApiRequest";
 export const AdminConnexionPanel = ({ show, onHide }) => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState(""); // État pour l'email
-  const [password, setPassword] = useState(""); // État pour le mot de passe
+  const [email, setEmail] = useState(""); 
+  const [password, setPassword] = useState(""); 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Empêche le comportement par défaut du formulaire
+    event.preventDefault(); 
     try {
       const response = await fetch(`${serverUrl}api/admins/login`, {
         method: "POST",
@@ -22,12 +22,10 @@ export const AdminConnexionPanel = ({ show, onHide }) => {
       });
 
       if (response.ok) {
-        // Redirigez vers la page spéciale
         navigate("/admin");
         onHide();
 
       } else {
-        // Gérez les erreurs de connexion ici
         console.error("Erreur de connexion");
       }
     } catch (error) {

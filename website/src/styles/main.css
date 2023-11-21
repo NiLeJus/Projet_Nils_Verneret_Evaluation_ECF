@@ -11980,7 +11980,9 @@ textarea.form-control-lg {
 }
 body {
   height: 100%;
+  width: 100%;
   background-color: #1b1e20;
+  overflow-x: hidden;
 }
 
 .root {

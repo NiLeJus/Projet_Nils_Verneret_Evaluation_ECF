@@ -9,6 +9,7 @@ import VehicleRelatedManagement from "../components/admin/management/VehicleRela
 import RequestManagement from "../components/admin/management/RequestManagement";
 import TestimonyManagement from "../components/admin/management/TestimonialsManagement";
 import ServiceManagement from "../components/admin/management/ServiceManagement"
+import GarageManagement from "../components/admin/management/GarageManagement"
 
 export const Admin = () => {
   const [activeComponent, setActiveComponent] = useState(null);
@@ -23,23 +24,27 @@ export const Admin = () => {
       <Row className="justify-content-md-center">
         <Col xs={12} md={6} lg={4}>
           <Button onClick={() => handleOpenComponent("AdminManagement")} className="mb-2 w-100">
-            Manager les comptes admins
+            Gérer les comptes admins
           </Button>
           <Button onClick={() => handleOpenComponent("VehicleManagement")} className="mb-2 w-100">
-            Manager les véhicules
+          Gérer les véhicules
           </Button>
           <Button onClick={() => handleOpenComponent("VehicleRelatedManagement")} className="mb-2 w-100">
-            Manager les données des véhicules
+          Gérer les données des véhicules
           </Button>
           <Button onClick={() => handleOpenComponent("RequestManagement")} className="mb-2 w-100">
-            Manager les demandes
+          Gérer les demandes
           </Button>
           <Button onClick={() => handleOpenComponent("TestimonyManagement")} className="mb-2 w-100">
-            Manager les commentaires
+          Gérer les commentaires
           </Button>
           <Button onClick={() => handleOpenComponent("ServiceManagement")} className="mb-2 w-100">
-            Manager les services
+          Gérer les services
           </Button>
+          <Button onClick={() => handleOpenComponent("GarageManagement")} className="mb-2 w-100">
+          Gérer les informations du garage
+          </Button>
+
         </Col>
       </Row>
 
@@ -49,6 +54,7 @@ export const Admin = () => {
       {activeComponent === "RequestManagement" && <RequestManagement />}
       {activeComponent === "TestimonyManagement" && <TestimonyManagement />}
       {activeComponent === "ServiceManagement" && <ServiceManagement />}
+      {activeComponent === "GarageManagement" && <GarageManagement />}
     </div>
     </>
   );

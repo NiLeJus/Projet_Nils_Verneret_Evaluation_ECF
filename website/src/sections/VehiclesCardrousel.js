@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import VehicleCard from '../components/vehicleRelated/VehicleCard';
 import { Container, Row } from 'react-bootstrap';
 import { fetchVehicles } from '../serverRelated/ApiRequest';
 
-export const VehiclesCardrousel = ({ selectedBrands, selectedModels, selectedTypes }) => {
+export const VehiclesCardrousel = forwardRef(({ selectedBrands, selectedModels, selectedTypes, onLoaded }, ref) => {
   const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
@@ -11,13 +11,13 @@ export const VehiclesCardrousel = ({ selectedBrands, selectedModels, selectedTyp
       try {
         const fetchedVehicles = await fetchVehicles();
         setVehicles(fetchedVehicles);
+        onLoaded();
       } catch (error) {
         console.error('Erreur lors de l\'initialisation des véhicules:', error);
       }
     };
     initVehicles();
-  }, []);
-
+  }, [onLoaded]); 
   // Fonction de filtrage
   const filterVehicles = () => {
     return vehicles.filter(vehicle => 
@@ -28,7 +28,7 @@ export const VehiclesCardrousel = ({ selectedBrands, selectedModels, selectedTyp
   };
 
   return (
-    <Row className='d-flex justify-content-center'>
+    <Row className='d-flex justify-content-center' ref={ref}>
       {filterVehicles().map((vehicle, index) => (
         <VehicleCard
           vehicleId={vehicle.id}
@@ -46,7 +46,9 @@ export const VehiclesCardrousel = ({ selectedBrands, selectedModels, selectedTyp
         />
       ))}
     </Row>
+    
   );
-};
+}
+);
 
 export default VehiclesCardrousel;

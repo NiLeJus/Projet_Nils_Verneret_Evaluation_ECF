@@ -60,6 +60,10 @@ export const VehicleDetailsForm = () => {
     },
   });
 
+  const handleRegisterRelOptionsVehicles = async (vehicleId, optionsId) => {
+    console.log("Envoi des options:", optionsId); // Afficher les options à envoyer
+  }
+
   const handleSendPhotos = async (vehicleId) => {
     console.log("Envoi des photos:", photos); // Afficher les photos à envoyer
     const formData = new FormData();
@@ -201,6 +205,7 @@ export const VehicleDetailsForm = () => {
       if (response && response.id) {
         const newVehicleId = response.id; 
         setVehicleId(newVehicleId);
+        handleRegisterRelOptionsVehicles(newVehicleId, vehicleData.Vehicle.Options);
         handleSendPhotos(newVehicleId);
       } else {
         console.error("Réponse inattendue de l'API", response);
@@ -313,11 +318,7 @@ export const VehicleDetailsForm = () => {
               <h2 className="details-title pb-4">Informations clès</h2>
 
               <Row id="key-info-wrapper">
-                <Col
-                  xs={12}
-                  md={6}
-                  className="px-4"
-                >
+            
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Factory className="me-2 key-icons" />
                     <div className="px-2">
@@ -405,7 +406,7 @@ export const VehicleDetailsForm = () => {
                       />
                     </div>
                   </div>
-                </Col>
+               
 
                 <Col
                   xs={12}
