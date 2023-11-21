@@ -1,0 +1,523 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+//Override Bootstrap variables
+$primary: #ea6d2a !default;
+$secondary: #ecd444 !default;
+$dark: #1b1e20 !default;
+$light: #f8f9fa !default;
+$dark-blue: #222632 !default;
+$grey: #d9d9d9 !default;
+$font-sans-serif: "Poppins", sans-serif !default;
+$font-family-base: "Poppins", sans-serif !default;
+$font-size-base: 1rem;
+
+//Import Bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+//Custom styles
+body {
+  height: 100%;
+  width: 100%;
+  background-color: $dark;
+  overflow-x: hidden;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+footer {
+  position: relative;
+  bottom: 100;
+  width: 100%;
+}
+
+
+.css-13cymwt-control {
+  width: 150px;
+}
+
+.carousel-indicators {
+  display: none;
+}
+/* Pour Chrome, Safari et les navigateurs basés sur WebKit */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+.offcanvas-backdrop.show {
+  opacity: 0.1;
+}
+
+.detail-panel-wrapper {
+  border: $light;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 15px;
+}
+
+.carousel {
+  margin: 0%;
+}
+
+.color-square-icon {
+  height: 1em;
+  width: 1em;
+  fill: $light;
+}
+
+.active-carousel-thumbnail {
+  translate: scale(1.2);
+  transform: translateY(5px);
+  transition: all 2s ease 0s;
+}
+#sticky-descriptions-tab-model-description,
+#sticky-descriptions-tab-condition-description {
+  color: $primary;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bolder;
+  font-size: 1.4em;
+}
+
+.stick-info-wrapper {
+  background-color: $dark;
+  border: $light;
+  border-style: solid;
+  border-width: 0.5px;
+}
+
+.stick-description-wrapper {
+  background-color: $light;
+}
+
+.stick-info-price {
+  color: $primary;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+  font-size: 3em;
+}
+
+.stick-info-title {
+  color: $primary;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+}
+
+.stick-infos {
+  margin-bottom: 0px;
+  color: $light;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 1.2em;
+}
+
+.stick-info-garantie {
+  color: $light;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.img-thumbnail {
+  transition: all 2s ease 0s;
+}
+
+/* Pour Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.li-no-style {
+  list-style-type: none;
+}
+
+.offcanvas-condition-name {
+  color: $primary;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.offcanvas-condition-description {
+  color: $light;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 0.9em;
+}
+
+.offcanvas-title {
+  color: $primary;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.info-icon {
+  height: 1em;
+  width: auto;
+  fill: $primary;
+  margin-left: 1em;
+}
+
+.key-icons {
+  height: 2em;
+  width: 2em;
+  fill: $light;
+  font-weight: bold;
+}
+
+h1 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+  font-size: 3em;
+  color: $primary;
+  margin-top: 50px;
+  text-transform: uppercase;
+}
+
+.adress-p {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 1.2em;
+  color: $light;
+}
+
+.navlink {
+  margin: 0 100px;
+  font-size: 1.3em;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ff000000;
+}
+
+.navlink:hover {
+  color: $secondary;
+}
+
+footer {
+ border-top: 1px solid $light;
+}
+
+.bg-image {
+  background-image: url("../visuals/landing_bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+
+.text-stats {
+  font-size:  1.5em;
+}
+.navbar-logo {
+  height: 5rem;
+  width: 5rem;
+}
+
+.footer-contact {
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+.btn-wrapper {
+  margin-top: 70px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.text-slogan {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 1.5em;
+  color: $light;
+}
+
+.text-slogan p {
+  text-shadow: 2px 2px 10px rgb(0, 0, 0);
+}
+
+.section-testimony {
+  background-color: white;
+  padding: 50px 0;
+}
+
+nav {
+  border-bottom: 1px solid $light;
+}
+
+.testimony-card {
+  background-color: $light;
+  border-radius: 15px;
+  border: 0;
+  padding-top: 2rem; 
+  padding-left: 1.8rem;
+  padding-right: 1.8rem ;
+  padding-bottom: 0.5rem;
+  text-align: center;
+
+  max-width: 600px; 
+  width: 100%;
+
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.testimony-name {
+font-weight: bold;
+font-size: 1rem
+}
+
+.testimony-text {
+font-weight: bold;
+font-size: large;
+}
+
+.testimony-date {
+  color: #6f6f6f;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-icon {
+  width: 2em;
+  height: 2em;
+  margin: 0.2rem;
+}
+
+.glass-button {
+  display: inline-block;
+  padding: 14px 32px;
+  border: 0;
+  text-decoration: none;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  color: $primary;
+  font-size: 35px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bolder;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-transform: uppercase;
+  width: 325px;
+  transition: all 0.3s ease 0s;
+}
+
+.glass-button:hover {
+  background-color: $primary;
+  border: 2px solid rgba(255, 255, 255, 0);
+  color: white;
+}
+
+.line {
+  width: 100%;
+  height: 3px;
+  background-color: $primary;
+}
+
+.team-image {
+  height: 300px;
+  width: auto;
+}
+
+.indent-p {
+  font-family: "Poppins", sans-serif;
+  color: $light;
+  text-indent: 20px;
+}
+
+.home-logo {
+  height: 6em;
+  width: auto;
+}
+
+.active3 {
+  color: $primary;
+}
+
+.vehicle-card-title {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bold;
+  font-size: 1.7em;
+  color: $primary;
+  text-transform: uppercase;
+  margin-top: 0px;
+}
+
+.vehicle-card-price {
+  font-family: "Poppins", sans-serif;
+  font-weight: bolder;
+  font-size: 2em;
+  margin-bottom: 5%;
+  margin-top: 5%;
+  color: $dark;
+  text-transform: uppercase;
+}
+
+.popover-text {
+  color: $primary;
+}
+
+.vehicle-card-tag {
+  transform: translateX(-0.2rem);
+  margin-top: 0.2rem;
+}
+
+.bg-none {
+  background-color: transparent !important;
+}
+
+.btn {
+  font-family: "Poppins", sans-serif;
+  font-weight: medium;
+  font-size: 1.2em;
+}
+
+.result-display-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: semi-bold;
+  font-size: 1.2em;
+  color: $light;
+}
+
+.filters-wrapper {
+
+  top: 0%; 
+  left: 0;
+  z-index: 1030; 
+}
+
+.vehicle-cardrousel {
+  position: absolute;
+  display: flex;
+  justify-content: center; 
+}
+
+.accordion .accordion-item .accordion-button .accordion-button .collapsed {
+  background-color: transparent;
+  border: 0 none;
+}
+
+.accordion .accordion-header {
+  background-color: transparent;
+  border-bottom: 0 none;
+  border: 0 none;
+}
+
+.accordion .accordion-button:not(.collapsed) {
+  color: inherit;
+  background-color: transparent;
+  box-shadow: none;
+  border: 0 none;
+}
+
+.accordion .accordion-body {
+  padding: 0;
+  border: 0 none;
+  background-color: transparent;
+}
+
+.filter-accordion-title {
+  color: $primary;
+  font-family: "Popppins", sans-serif;
+  font-weight: bolder;
+}
+
+.filter-accordion-sub-title {
+  color: $primary;
+  font-family: "Popppins", sans-serif;
+  font-weight: semi-bold;
+}
+
+.filter-search-form {
+  width: 85%;
+  background-color: $dark-blue;
+  border: #ea6d2a 1px solid;
+  color: $light;
+}
+
+.filter-options-wrapper {
+  max-height: 200px;
+  height: auto;
+  overflow: auto;
+}
+
+.accordion-button {
+  font-family: "Poppins", sans-serif;
+  font-weight: semi-bold;
+  color: $light;
+}
+
+.accordion-button:hover {
+  color: $primary;
+}
+
+.accordion-button::after {
+  color: $light;
+}
+
+.sort-select {
+  width: auto;
+}
+
+/* Cible toutes les scrollbar pour les navigateurs WebKit/Blink */
+*::-webkit-scrollbar {
+  width: 8px; /* Largeur de la scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent; /* Fond transparent pour le track de la scrollbar */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: $light; /* Couleur de la partie défilable */
+  border-radius: 15px; /* Angle arrondis pour une forme de cercle */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: $primary; /* Couleur au survol */
+}
+
+/* Styles standards pour les autres navigateurs */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $primary transparent; /* thumb et track colors */
+}
+
+.details-title {
+  color: $primary;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: bolder;
+  font-size: 2.2em;
+  text-transform: uppercase;
+  margin-top: 0.2em;
+}
+
+.key-info-title {
+  color: $light;
+  font-family: "Popppins", sans-serif;
+  font-weight: semi-bold;
+  font-size: 1.3em;
+  padding-bottom: 0px;
+}
+
+.key-info {
+  color: $light;
+  font-family: "Popppins", sans-serif;
+  font-weight: 100;
+  font-size: 1.1em;
+  margin-left: 5%;
+}
