@@ -26,7 +26,6 @@ export const ModelForm = ({ onModelChange, brand_id }) => {
 
   const handleFetchModels = async () => {
     if (!brand_id) {
-      window.alert("Veuillez sélectionner une marque de véhicule avant de sélectionner un modèle.");
       return;
     }
 
