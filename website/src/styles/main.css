@@ -11978,6 +11978,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+html {
+  width: 100%;
+}
+
 body {
   height: 100%;
   width: 100%;
@@ -12119,15 +12123,15 @@ html {
 }
 
 .info-icon {
-  height: 1em;
-  width: auto;
+  height: 30px;
+  width: 30px;
   fill: #ea6d2a;
   margin-left: 1em;
 }
 
 .key-icons {
-  height: 2em;
-  width: 2em;
+  height: 30px;
+  width: 30px;
   fill: #f8f9fa;
   font-weight: bold;
 }
@@ -12144,7 +12148,7 @@ h1, .h1 {
 .adress-p {
   font-family: "Poppins", sans-serif;
   font-weight: 300;
-  font-size: 1.2em;
+  font-size: 1em;
   color: #f8f9fa;
 }
 
@@ -12192,6 +12196,10 @@ footer {
   justify-content: space-around;
 }
 
+.border-light {
+  color: #ea6d2a;
+}
+
 .text-slogan {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
@@ -12203,13 +12211,23 @@ footer {
   text-shadow: 2px 2px 10px rgb(0, 0, 0);
 }
 
+.schedule-days {
+  font-family: "Poppins", sans-serif;
+  font-weight: bolder;
+  font-size: 1.1em;
+  color: #f8f9fa;
+}
+
+.schedule-hours {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 0.9em;
+  color: #f8f9fa;
+}
+
 .section-testimony {
   background-color: white;
   padding: 50px 0;
-}
-
-nav {
-  border-bottom: 1px solid #f8f9fa;
 }
 
 .testimony-card {
@@ -12248,6 +12266,11 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.footer-schedule-li {
+  color: rgb(255, 88, 88);
+  margin-bottom: 10px;
 }
 
 .star-icon {
@@ -12301,7 +12324,7 @@ nav {
 }
 
 .home-logo {
-  height: 6em;
+  height: 8em;
   width: auto;
 }
 
@@ -12329,7 +12352,14 @@ nav {
 }
 
 .popover-text {
-  color: #ea6d2a;
+  color: #f8f9fa;
+  text-align: left;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+#popover-options {
+  text-align: left;
 }
 
 .vehicle-card-tag {
@@ -12413,6 +12443,13 @@ nav {
   max-height: 200px;
   height: auto;
   overflow: auto;
+}
+
+.option-item {
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 1.2em;
 }
 
 .accordion-button {

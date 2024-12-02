@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import  { sendCustomerRequest } from "../../serverRelated/ApiRequest";
 
 export const OffCanvasUserRequest = ({
   vehicleId,
@@ -14,11 +14,9 @@ export const OffCanvasUserRequest = ({
   const [preferPhone, setPreferPhone] = useState(false);
   const [message, setMessage] = useState("");
   const [requesterName, setRequesterName] = useState("");
-  const [gender, setGender] = useState(""); 
+  const [gender, setGender] = useState("");
+  const [honeyPot, setHoneyPot] = useState("");
 
-
-
-  //#region //* Changement des valeurs
   const handlePhoneChange = (event) => {
     let input = event.target.value;
 
@@ -40,20 +38,19 @@ export const OffCanvasUserRequest = ({
     setRequesterName(event.target.value);
   };
 
-  const handleMessageChange = (event) => { 
+  const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
 
+
+
   const handlePreferChange = (event) => {
-    setPreferPhone(!event.target.checked);
+    setPreferPhone(event.target.checked); 
   };
 
-  //#endregion
-
-  //#region //* Validation des valeurs
   const isValidPhoneNumber = (phoneNumber) => {
     const validPrefixes = ["+336", "+337", "336", "337", "07", "06"];
-    return validPrefixes.some(prefix => phoneNumber.startsWith(prefix));
+    return validPrefixes.some((prefix) => phoneNumber.startsWith(prefix));
   };
 
   const isValidEmail = (email) => {
@@ -64,7 +61,6 @@ export const OffCanvasUserRequest = ({
   const isValidField = (field) => {
     return field.trim().length > 0;
   };
-  //#endregion
 
   const handleSendRequest = async (event) => {
     event.preventDefault();
@@ -94,28 +90,14 @@ export const OffCanvasUserRequest = ({
       is_processed: false,
       received_at: new Date(),
       processed_at: null,
+      honeyPot : honeyPot,
       gender
     };
 
-        try {
-          const response = await fetch("http://localhost:5001/api/requests", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newRequest),
-          });
-
-          if (response.ok) {
-            alert("Votre demande a bien été envoyée");
-            handleCloseRequest();
-          } else {
-            alert("Une erreur est survenue");
-          }
-        } catch (error) {
-          console.error("Erreur lors de l'envoi de la demande:", error);
-          alert("Une erreur est survenue lors de l'envoi de la demande");
-        }
+    const isSuccess = await sendCustomerRequest(newRequest);
+    if (isSuccess) {
+      handleCloseRequest();
+    }
   };
 
   return (
@@ -127,13 +109,15 @@ export const OffCanvasUserRequest = ({
         backdrop={true}
         className="bg-dark custom-offcanvas"
       >
-        <Offcanvas.Header closeButton closeVariant="white">
+        <Offcanvas.Header
+          closeButton
+          closeVariant="white"
+        >
           <Offcanvas.Title>Contacter nous !</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Form className="text-light px-1 py-3">
-            <Form.Group className="mb-3"
-           >
+            <Form.Group className="mb-3">
               <Form.Label>Civilité</Form.Label>
               <Form.Check
                 inline
@@ -181,7 +165,7 @@ export const OffCanvasUserRequest = ({
               <Form.Control
                 name="phone"
                 type="tel"
-                placeholder= "+336 ou 06"
+                placeholder="+336 ou 06"
                 onChange={handlePhoneChange}
                 required
                 isInvalid={!isValidPhoneNumber}
@@ -193,7 +177,7 @@ export const OffCanvasUserRequest = ({
 
             <Form.Group className="mb-3">
               <Form.Check
-                label="Préférer être contacté par email"
+                label="Préférer être contacté par téléphone"
                 name="preference"
                 type="checkbox"
                 id={`inline-checkbox-md`}
@@ -210,6 +194,18 @@ export const OffCanvasUserRequest = ({
                 isInvalid={!isValidField}
                 onChange={handleMessageChange}
                 placeholder="Votre message ici"
+              />
+            </Form.Group>
+
+            <Form.Group
+              className="mb-3"
+              style={{ display: "none" }}
+            >
+              <Form.Label>Check box</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={(e) => setHoneyPot(e.target.value)}
+                value={honeyPot}
               />
             </Form.Group>
 
@@ -230,11 +226,8 @@ export const OffCanvasUserRequest = ({
               </Button>
             </div>
           </Form>
-
-          
         </Offcanvas.Body>
-        <hr/>
- 
+        <hr />
       </Offcanvas>
     </>
   );

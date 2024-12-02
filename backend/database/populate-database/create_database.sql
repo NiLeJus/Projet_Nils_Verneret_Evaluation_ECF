@@ -55,9 +55,9 @@ CREATE TABLE brands (
 CREATE TABLE vehicle_models (
   id INT PRIMARY KEY AUTO_INCREMENT,
   brand_id INT NOT NULL,
-  CONSTRAINT fk_brand_id 
-  FOREIGN KEY (brand_id) 
-  REFERENCES brands(id),
+    CONSTRAINT fk_brand_id 
+    FOREIGN KEY (brand_id) 
+    REFERENCES brands(id),
   name VARCHAR(100) NOT NULL,
   description TEXT NOT NULL,
   door_number TINYINT NOT NULL DEFAULT 5,
@@ -158,6 +158,13 @@ CREATE TABLE photos (
   url VARCHAR(2048) UNIQUE NOT NULL
 );
 
+
+ALTER TABLE photos DROP FOREIGN KEY fk_vehicle_id_for_photo;
+ALTER TABLE photos ADD CONSTRAINT fk_vehicle_id_for_photo 
+FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE;
+
+
+
 CREATE TABLE rel_vehicle_options (
   PRIMARY KEY(vehicle_id, option_id),
   vehicle_id INT NOT NULL,  
@@ -181,4 +188,12 @@ CREATE TABLE rel_vehicle_models_vehicle_types (
     FOREIGN KEY (vehicle_type_id) 
     REFERENCES vehicle_types(id)
 );
+
+
+
+
+
+
+
+
 

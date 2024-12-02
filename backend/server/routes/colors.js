@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { Op } = require("sequelize");
 const { Color } = require('../scripts/db');
 
 

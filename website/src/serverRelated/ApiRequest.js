@@ -1,3 +1,4 @@
+import fetchWithToken from './fetchWithToken.js';
 export const serverUrl = "http://localhost:5001/";
 
 //Brand
@@ -51,7 +52,6 @@ const fetchVehicleModelData = async (model_id) => {
 };
 
 const fetchVehicleModelsByBrand = async (brand_id) => {
-  console.log()
   try {
     const response = await fetch(
       serverUrl + "api/vehicleModels/byBrand/" +  brand_id
@@ -120,6 +120,30 @@ const deleteCustomerRequest = async (requestId) => {
   }
 };
 
+const sendCustomerRequest = async (newRequestData) => {
+  try {
+    const response = await fetch(`${serverUrl}api/requests`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newRequestData),
+    });
+
+    if (!response.ok) {
+      throw new Error('La demande a échoué avec le statut ' + response.status);
+    }
+
+    alert("Votre demande a bien été envoyée");
+    return true; // Indique le succès
+  } catch (error) {
+    console.error("Erreur lors de l'envoi de la demande:", error);
+    alert("Une erreur est survenue lors de l'envoi de la demande");
+    return false; // Indique l'échec
+  }
+}
+
+
 //Photos
 
 const deletePhotos = async (vehicleId) => {
@@ -147,6 +171,22 @@ const fetchVehicles = async () => {
   }
 };
 
+
+const fetchVehicleById = async (vehicleId) =>{
+  try {
+    const response = await fetch(`${serverUrl}api/vehicles/details/${vehicleId}`);
+   
+    if (!response.ok) throw new Error("Erreur réseau");
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Erreur lors de la récupération des détails du véhicule:",
+      error
+    );
+  }
+}
+
+
 const deleteVehicle = async (vehicleId) => {
   try {
     const response = await fetch(`${serverUrl}api/vehicles/${vehicleId}`, {
@@ -162,7 +202,7 @@ const deleteVehicle = async (vehicleId) => {
 };
 
 const addNewVehicle = async (vehicleData) => {
-  console.log(vehicleData);
+  console.log("Options received:", vehicleData.Options);
   try {
     // Création de l'objet de données à envoyer
     const dataToSend = {
@@ -179,8 +219,8 @@ const addNewVehicle = async (vehicleData) => {
       transmission_id: vehicleData.Vehicle.transmission_id,
       tax_horsepower: vehicleData.Vehicle.tax_horsepower,
       at_garage_id: 1,
+      options: vehicleData.Vehicle.Options = vehicleData.Vehicle.Options.map(option => parseInt(option.id)).filter(id => !isNaN(id))
     };
-    console.log(dataToSend);
 
     const response = await fetch(serverUrl + "api/vehicles/add", {
       method: "POST",
@@ -190,13 +230,18 @@ const addNewVehicle = async (vehicleData) => {
       body: JSON.stringify(dataToSend),
     });
 
+    console.log("response.ok", response.ok);
     if (!response.ok) {
       throw new Error("Erreur réseau lors de l'ajout d'un nouveau véhicule");
     }
 
     const responseData = await response.json();
-    console.log("réponse de la requête : ", responseData);
-    return responseData;
+    console.log(responseData)
+    const result = {
+      ...responseData,
+      ok: response.ok
+    };
+    return result;
   } catch (error) {
     console.error("Error adding new vehicle:", error);
     throw error;
@@ -204,7 +249,6 @@ const addNewVehicle = async (vehicleData) => {
 };
 
 //Colors
-
 const fetchColors = async () => {
   try {
     const response = await fetch(serverUrl + "api/colors");
@@ -217,11 +261,11 @@ const fetchColors = async () => {
 };
 
 //Admins
+
 const fetchAdmins = async () => {
   try {
-    const response = await fetch(`${serverUrl}api/admins`);
-    if (!response.ok) throw new Error("Erreur réseau");
-    return response.json();
+    const admins = await fetchWithToken(`${serverUrl}api/admins`);
+    return admins;
   } catch (error) {
     console.error("Error fetching admins:", error);
   }
@@ -264,7 +308,6 @@ const modifyAdmin = async (adminId, updatedData) => {
 };
 
 const addNewAdmin = async (newAdminData) => {
-  console.log(newAdminData);
   try {
     const response = await fetch(`${serverUrl}api/admins/add`, {
       method: "POST",
@@ -284,7 +327,6 @@ const addNewAdmin = async (newAdminData) => {
 };
 
 //Fuels
-
 const fetchFuelTypes = async () => {
   try {
     const response = await fetch(serverUrl + "api/fuelTypes");
@@ -310,7 +352,7 @@ const fetchServices = async () => {
 
 const deleteService = async (serviceId) => {
   try {
-    const response = await fetch(`${serverUrl}api/services/${serviceId}`, {
+    const response = await fetchWithToken(`${serverUrl}api/services/${serviceId}`, {
       method: "DELETE",
     });
     if (!response.ok)
@@ -324,7 +366,7 @@ const deleteService = async (serviceId) => {
 
 const modifyService = async (serviceId, updatedData) => {
   try {
-    const response = await fetch(`${serverUrl}api/services/${serviceId}`, {
+    const response = await fetchWithToken(`${serverUrl}api/services/${serviceId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -342,7 +384,7 @@ const modifyService = async (serviceId, updatedData) => {
 
 const addNewService = async (newServiceData) => {
   try {
-    const response = await fetch(`${serverUrl}api/services`, {
+    const response = await fetchWithToken(`${serverUrl}api/services`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -384,7 +426,6 @@ const fetchDisplayedTestimonials = async () => {
 };
 
 const deleteTestimony = async (testimonyId) => {
-  console.log(testimonyId);
   try {
     const response = await fetch(
       `${serverUrl}api/testimonials/${testimonyId}`,
@@ -403,7 +444,6 @@ const deleteTestimony = async (testimonyId) => {
 
 const modifyTestimony = async (testimonyId, updatedData) => {
   try {
-    console.log(updatedData);
     const response = await fetch(
       `${serverUrl}api/testimonials/${testimonyId}`,
       {
@@ -424,7 +464,6 @@ const modifyTestimony = async (testimonyId, updatedData) => {
 };
 
 const addNewTestimony = async (newTestimonyData) => {
-  console.log(newTestimonyData);
   try {
     const response = await fetch(`${serverUrl}api/testimonials`, {
       method: "POST",
@@ -507,6 +546,90 @@ const fetchVehicleConditions = async () => {
 
 //Admins
 
+//Count 
+const getVehicleCounts = async () => 
+{
+  try {
+    // Exécutez les appels fetch en parallèle
+    const responses = await Promise.all([
+      fetch(serverUrl + "api/vehicleCount/vehicle-per-brand"),
+      fetch(serverUrl + "api/vehicleCount/vehicle-per-model"),
+      fetch(serverUrl + "api/vehicleCount/vehicle-per-type" )
+    ]);
+
+    if (!responses[0].ok || !responses[1].ok || !responses[2].ok) throw new Error("Erreur réseau");
+
+    // Parse les réponses JSON en parallèle
+    const [brandsCount, modelsCount, typesCount] = await Promise.all([
+      responses[0].json(),
+      responses[1].json(),
+      responses[2].json()
+    ]);
+
+    return { brandsCount, modelsCount, typesCount};
+
+  } catch (error) {
+    console.error("Error fetching vehicle counts:", error);
+    throw error; 
+};
+};
+
+//Schedule 
+
+const scheduleGetAllDays = async (year) => {
+  try {
+    const response = await fetch(serverUrl + "api/schedules/alldays/" + year);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching all days:", error);
+    throw error;
+  }
+};
+
+const scheduleUpdateDay = async (date, dayData) => {
+  try {
+    const response = await fetch(serverUrl + "api/schedules/days/" + date, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dayData),
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error updating day ${date}:`, error);
+    throw error;
+  }
+};
+
+// Obtenir les jours d'une semaine spécifique
+const scheduleGetWeek = async (week, year, weekNumber) => {
+  try {
+    const response = await fetch(serverUrl + "api/schedules/"  + year + "/" + week +  "/" + weekNumber);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching week ${weekNumber} of year ${year}:`, error);
+    throw error;
+  }
+};
+
+const scheduleGetDefaultWeek = async ( year, week, weekNumber) => {
+  try {
+    const response = await fetch(serverUrl + "api/schedules/DefaultWeek");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching default`, error);
+    throw error;
+  }
+}
+
 // Exporting functions
 export {
   addNewVehicle,
@@ -517,6 +640,7 @@ export {
   fetchVehicleTypes,
   deletePhotos,
   fetchVehicles,
+  fetchVehicleById,
   addNewAdmin,
   fetchAdmins,
   deleteAdmin,
@@ -540,5 +664,11 @@ export {
   fetchColors,
   fetchOptions,
   fetchTransmissions,
-  fetchVehicleConditions
+  fetchVehicleConditions,
+  getVehicleCounts,
+  scheduleGetAllDays,
+  scheduleUpdateDay,
+  scheduleGetWeek,
+  scheduleGetDefaultWeek,
+  sendCustomerRequest
 };

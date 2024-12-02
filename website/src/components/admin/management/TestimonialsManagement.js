@@ -123,7 +123,7 @@ export const TestimonialsManagement = () => {
   return (
     <Container>
       <div className="bg-dark align-content-center">
-        <h1 className="text-light">TestimonialsManagement</h1>
+        <h1 className="text-light">Gérer les commentaires</h1>
         <div className="bg-dark d-flex justify-content-center">
           <Button
             className="mb-5 mx-auto"
@@ -132,8 +132,10 @@ export const TestimonialsManagement = () => {
             Ajouter un nouveau témoignage
           </Button>
 
+<div>
           <p className="text-light">Liens à envoyer aux utilisateurs pour laisse un avis</p>
-          <p>http://localhost:3000/leaveTestimony</p>
+          <p className="text-light">http://localhost:3000/leaveTestimony</p>
+     </div>
         </div>
       </div>
       <Table

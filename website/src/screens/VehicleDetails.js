@@ -7,23 +7,28 @@ import { useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import { handleDateDifference } from "../functions/handleDateDifference.js";
 import { capitalizeFirstLetter } from "../functions/capitalizeFirstLetter.js";
+import { formatMileage } from "../functions/formatMileage.js";
+import { fetchVehicleById } from "../serverRelated/ApiRequest.js";
+import { Helmet } from "react-helmet";
 
 const carouselStyle = {
-  Width: "720px", // Largeur maximale de l'image
-  Height: "400px", // Hauteur maximale de l'image
-  margin: "auto", // Centre le carrousel si l'écran est plus large
+  Width: "720px", 
+  Height: "400px", 
+  margin: "auto", 
 };
+
 const carouselImagesStyle = {
-  width: "100%", // Remplir la largeur du cadre
-  height: "100%", // Remplir la hauteur du cadre
-  objectFit: "cover", // Agrandir ou réduire l'image pour couvrir le cadre
-  objectPosition: "center", // Centrer l'image dans le cadre
+  width: "100%", 
+  height: "100%", 
+  objectFit: "cover", 
+  objectPosition: "center", 
 };
 
 export const VehicleDetails = () => {
   const baseUrl = "http://localhost:3000";
   const { vehicleId } = useParams();
   const [vehicleDetails, setVehicleDetails] = useState({});
+  const [index, setIndex] = useState(0);
 
   const handleTransformedData = (vehicle) => {
     const formattedPrice = vehicle.price.toLocaleString("fr-FR");
@@ -33,7 +38,7 @@ export const VehicleDetails = () => {
       brand: capitalizeFirstLetter(vehicle.VehicleModel?.Brand?.name),
       vehicleModel: vehicle.VehicleModel?.name,
       productionYear: vehicle.production_year,
-      mileage: vehicle.mileage,
+      mileage: formatMileage(vehicle?.mileage),
       fuelType: capitalizeFirstLetter(vehicle.FuelType?.name),
       transmission: capitalizeFirstLetter(vehicle.Transmission?.name),
       vehicleCondition: vehicle.VehicleCondition?.name,
@@ -46,16 +51,24 @@ export const VehicleDetails = () => {
       vehicleComment: vehicle.vehicle_comment,
       vehicleModelDescription: vehicle.VehicleModel?.description,
       createdAtDate: handleDateDifference(vehicle.created_at),
+      vehicleType: vehicle.VehicleType.name,
+      vehicleOptions: vehicle.Options,
     };
+
     const photoUrls = vehicle.Photos.map((photo) => baseUrl + photo.url);
     setVehicleDetails({ ...transformedData, photoUrls });
   };
 
   useEffect(() => {
-    fetchVehicle();
-  }, [vehicleId]);
+    async function fetchData(vehicleId) {
+      const response = await fetchVehicleById(vehicleId);
+      handleTransformedData(response);
+    }
 
-  const [index, setIndex] = useState(0);
+    if (vehicleId) {
+      fetchData(vehicleId);
+    }
+  }, [vehicleId]);
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
@@ -63,9 +76,6 @@ export const VehicleDetails = () => {
 
   const fetchVehicle = async () => {
     try {
-      const response = await fetch(`/api/vehicles/details/${vehicleId}`);
-      const vehicle = await response.json();
-      handleTransformedData(vehicle);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du véhicule:",
@@ -74,10 +84,51 @@ export const VehicleDetails = () => {
     }
   };
 
+  const [containerStyle, setContainerStyle] = useState({
+    position: "relative",
+    width: "69%",
+    height: "2000px",
+  });
+
+  useEffect(() => {
+    fetchVehicle();
+    const updateContainerStyle = () => {
+      if (window.matchMedia("(min-width: 1068px)").matches) {
+        setContainerStyle({
+          position: "relative",
+          width: "39%",
+        });
+      } else {
+        setContainerStyle({
+          position: "relative",
+          width: "69%",
+        });
+      }
+    };
+
+    window.addEventListener("resize", updateContainerStyle);
+    updateContainerStyle();
+    return () => window.removeEventListener("resize", updateContainerStyle);
+  }, []);
+
   return (
     <>
+      <Helmet>
+        <title>Vehicule</title>
+        <meta
+          name="description"
+          content="Découvrez ce véhicule"
+        />
+        <meta charSet="utf-8" />
+        <meta
+          name="keywords"
+          content="garage, voiture"
+        />
+      </Helmet>
+
       <Container
-        style={{ position: "relative", width: "39%", height: "2000px" }}
+        mb-5
+        style={containerStyle}
       >
         <Carousel
           activeIndex={index}
@@ -125,12 +176,22 @@ export const VehicleDetails = () => {
           ))}
         </div>
         <p className="text-light mt-2">
-          Réfèrence : {vehicleDetails.vehicleId}
+          Réfèrence : {vehicleDetails.vehicleId} - En ligne depuis{" "}
+          {vehicleDetails.createdAtDate}
         </p>
-        <p className="text-light mt-2">
-          En ligne depuis {vehicleDetails.createdAtDate}
-        </p>
-
+        <StickyDetails
+          vehicleId={vehicleDetails.vehicleId}
+          brand={vehicleDetails.brand}
+          vehicleModel={vehicleDetails.vehicleModel}
+          productionYear={vehicleDetails.productionYear}
+          mileage={vehicleDetails.mileage}
+          fuelType={vehicleDetails.fuelType}
+          transmission={vehicleDetails.transmission}
+          vehicleCondition={vehicleDetails.vehicleCondition}
+          price={vehicleDetails.price}
+          vehicleComment={vehicleDetails.vehicleComment}
+          vehicleModelDescription={vehicleDetails.vehicleModelDescription}
+        />
         <div className="d-flex justify-content-center mt-2">
           <Container className="p-0">
             <div className="detail-panel-wrapper px-5 py-3 mb-3">
@@ -145,9 +206,8 @@ export const VehicleDetails = () => {
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Factory className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Marque et modèle :</h3>
+                      <h3 className="key-info-title">Marque et modèle</h3>
                       <p className="key-info">
-                        {" "}
                         {vehicleDetails.brand} - {vehicleDetails.vehicleModel}
                       </p>
                     </div>
@@ -156,9 +216,8 @@ export const VehicleDetails = () => {
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Key className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Mise en circulation :</h3>
+                      <h3 className="key-info-title">Mise en circulation</h3>
                       <p className="key-info">
-                        {" "}
                         {vehicleDetails.productionYear}
                       </p>
                     </div>
@@ -167,7 +226,7 @@ export const VehicleDetails = () => {
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Mileage className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Kilomètrage :</h3>
+                      <h3 className="key-info-title">Kilomètrage</h3>
                       <p className="key-info">{vehicleDetails.mileage}</p>
                     </div>
                   </div>
@@ -175,7 +234,7 @@ export const VehicleDetails = () => {
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Fuel className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Carburant :</h3>
+                      <h3 className="key-info-title">Carburant</h3>
                       <p className="key-info">{vehicleDetails.fuelType}</p>
                     </div>
                   </div>
@@ -183,7 +242,7 @@ export const VehicleDetails = () => {
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Transmission className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Transmission :</h3>
+                      <h3 className="key-info-title">Transmission</h3>
                       <p className="key-info">{vehicleDetails.transmission}</p>
                     </div>
                   </div>
@@ -197,24 +256,31 @@ export const VehicleDetails = () => {
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Stars className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Types :</h3>
-                      <p className="key-info">Berline</p>
+                      <h3 className="key-info-title">Type</h3>
+                      <p className="key-info">{vehicleDetails.vehicleType}</p>
                     </div>
                   </div>
 
                   <div className="d-flex align-items-top">
                     <IconsKeyInfo.Painting className="me-2 key-icons" />
                     <div className="px-2">
-                      <h3 className="key-info-title">Peinture :</h3>
-                      <p className="key-info">{vehicleDetails.color}</p>
-                      <Form.Control
-                        style={{ backgroundColor: vehicleDetails.colorHex }}
-                        type="color"
-                        id="ColorInput"
-                        value={vehicleDetails.colorHex} // Utilisez l'état pour contrôler la valeur
-                        disabled
-                        readOnly
-                      />
+                      <h3 className="key-info-title">Peinture</h3>
+                      <p className="key-info d-inline-flex">
+                        {vehicleDetails.color}
+                        <Form.Control
+                          className="mx-2"
+                          style={{
+                            backgroundColor: vehicleDetails.colorHex,
+                            width: "2em",
+                            height: "auto",
+                          }}
+                          type="color"
+                          id="ColorInput"
+                          value={vehicleDetails.colorHex}
+                          disabled
+                          readOnly
+                        />
+                      </p>
                     </div>
                   </div>
 
@@ -246,40 +312,24 @@ export const VehicleDetails = () => {
             </div>
             <div className="detail-panel-wrapper px-5 py-3 mb-3">
               <h2 className="details-title pb-4">Options et équipements</h2>
+              <ul>
+                {vehicleDetails.vehicleOptions?.map((option, idx) => (
+                  <li
+                    key={idx}
+                    className="option-wrapper text-light mb-3"
+                  >
+                    <h2 className="option-item">
+                      {option.name.charAt(0).toUpperCase() +
+                        option.name.slice(1).toLowerCase()}
+                    </h2>
 
-              <Row>
-                <Col
-                  xs={12}
-                  md={6}
-                  className="px-4"
-                >
-                  <div className="d-flex align-items-top"></div>
-                </Col>
-
-                <Col
-                  xs={12}
-                  md={6}
-                  className="px-4"
-                >
-                  <div className="d-flex align-items-top"></div>
-                </Col>
-              </Row>
+                    <p>{option.description}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </Container>
         </div>
-        <StickyDetails
-          vehicleId={vehicleDetails.vehicleId}
-          brand={vehicleDetails.brand}
-          vehicleModel={vehicleDetails.vehicleModel}
-          productionYear={vehicleDetails.productionYear}
-          mileage={vehicleDetails.mileage}
-          fuelType={vehicleDetails.fuelType}
-          transmission={vehicleDetails.transmission}
-          vehicleCondition={vehicleDetails.vehicleCondition}
-          price={vehicleDetails.price}
-          vehicleComment={vehicleDetails.vehicleComment}
-          vehicleModelDescription={vehicleDetails.vehicleModelDescription}
-        />
       </Container>
     </>
   );

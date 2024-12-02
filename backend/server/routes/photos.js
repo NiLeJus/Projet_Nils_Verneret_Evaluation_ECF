@@ -2,14 +2,40 @@ const express = require("express");
 const router = express.Router();
 const { Photo } = require("../scripts/db");
 const multer = require("multer");
-const path = require('path');
-const sharp = require('sharp');
-const fs = require('fs');
+const path = require("path");
+const sharp = require("sharp");
+const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
+
+// Limite de taille de fichier à 5 MB
+const maxSize = 5 * 1024 * 1024;
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Not an image! Please upload only images."), false);
+  }
+};
 // Configuration de multer pour stocker les fichiers temporairement
-const upload = multer({ dest: 'uploads/' });
+const uploadTemp = multer({
+  dest: "uploads/temp/",
+  limits: { fileSize: maxSize },
+  fileFilter: fileFilter,
+});
 
-// Récupèrer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "..", "public", "vehicleImages"));
+  },
+  filename: function (req, file, cb) {
+    // Utilisation de uuid pour générer un nom de fichier unique
+    cb(null, `${Date.now()}-${uuidv4()}`);
+  },
+});
+
+// Récupérer
 router.get("/", async (req, res) => {
   try {
     const photos = await Photo.findAll();
@@ -19,59 +45,57 @@ router.get("/", async (req, res) => {
   }
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '..', 'public', 'vehicleImages'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
 // Ajouter
-router.post("/", upload.array('photo', 5), async (req, res) => {
+router.post("/", uploadTemp.array("photo", 5), async (req, res) => {
   try {
     const { vehicle_id } = req.body;
-    console.log(vehicle_id);
-
     if (req.files) {
       let newPhotos = [];
       for (const file of req.files) {
         const tempPath = file.path;
-        const targetFilename = `${Date.now()}-${file.originalname}`;
-        const targetPath = path.join(__dirname, '..', 'public', 'vehicleImages', targetFilename);
+        const cleanFilename = file.originalname.replace(/[^a-zA-Z0-9.]/g, "-");
+        const targetFilename = `${Date.now()}-${uuidv4()}-${cleanFilename}`;
+        const targetPath = path.join(
+          __dirname,
+          "..",
+          "public",
+          "vehicleImages",
+          targetFilename
+        );
 
-        const desiredWidth = 720; // Largeur souhaitée
-        const desiredHeight = 400; // Hauteur souhaitée
+        const desiredWidth = 720;
+        const desiredHeight = 400;
 
-        // Utiliser sharp pour redimensionner l'image
-        await sharp(tempPath)
-          .resize({
-            width: desiredWidth,
-            height: desiredHeight,
-            fit: sharp.fit.inside, // Cette option garantit que l'image sera agrandie/diminuée pour tenir dans le cadre spécifié, en conservant le ratio
-            withoutEnlargement: false // Permet d'agrandir les images plus petites que la taille souhaitée
-          })
-          .toFormat('jpeg' )
-          .toFile(targetPath);
+        try {
+          await sharp(tempPath)
+            .resize({
+              width: desiredWidth,
+              height: desiredHeight,
+              fit: sharp.fit.cover,
+              withoutEnlargement: true,
+            })
+            .webp({ lossless: true })
+            .toFile(targetPath);
 
-        fs.unlinkSync(tempPath);
+          fs.unlinkSync(tempPath);
 
-        const url = `/public/vehicleImages/${targetFilename}`;
-        const newPhoto = await Photo.create({ vehicle_id, url });
-        newPhotos.push(newPhoto);
+          const url = `/public/vehicleImages/${targetFilename}`;
+          const newPhoto = await Photo.create({ vehicle_id, url });
+          newPhotos.push(newPhoto);
+        } catch (error) {
+          fs.unlinkSync(tempPath); // Nettoyer en cas d'erreur de traitement d'image
+          throw error; // Continuer à lancer l'erreur pour être gérée plus loin
+        }
       }
-
       res.status(201).json(newPhotos);
     } else {
       throw new Error("Aucun fichier n'a été téléchargé.");
     }
   } catch (error) {
+    // Nettoyer les fichiers déjà traités ou les enregistrements de base de données en cas d'erreur
     res.status(500).send(error.message);
   }
 });
-
-
 // Mettre à jour
 router.put("/:id", async (req, res) => {
   try {
@@ -99,7 +123,13 @@ router.delete("/:vehicle_id", async (req, res) => {
 
     if (photos && photos.length > 0) {
       for (const photo of photos) {
-        const filePath = path.join(__dirname, '..', 'public', 'vehicleImages', photo.filename);
+        const filePath = path.join(
+          __dirname,
+          "..",
+          "public",
+          "vehicleImages",
+          photo.filename
+        );
         try {
           await fs.unlink(filePath); // Supprime le fichier du serveur
         } catch (fileError) {
@@ -115,6 +145,5 @@ router.delete("/:vehicle_id", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
-
 
 module.exports = router;

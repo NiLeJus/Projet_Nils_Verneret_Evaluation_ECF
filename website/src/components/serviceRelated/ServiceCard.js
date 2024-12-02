@@ -7,7 +7,7 @@ import Badge from "react-bootstrap/Badge";
 function ServiceCard({ service }) {
     return (
     
-      <Card style={{ width: '18rem', border: 'none', backgroundColor: 'transparent' }} className="m-1">
+      <Card style={{ width: '18rem', border: "2px dotted #ff6550", backgroundColor: 'transparent' }} className="m-1">
       <Card.Body>
         <Card.Title  className="text-primary vehicle-card-title" >{service.name}</Card.Title>
         <Card.Text  className="text-light mb-4">

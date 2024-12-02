@@ -6,7 +6,7 @@ import AddOptionModal from "../../../addingEntries/AddOptionModal";
 import { fetchOptions } from "../../../../serverRelated/ApiRequest";
 
 let vehicleOptions = [
-  // { value: "addNewOption", label: "Ajouter une option de véhicule" },
+   //{ value: "addNewOption", label: "Ajouter une option de véhicule" }
 ];
 
 export const OptionsForm = ({onOptionsChange}) => {
@@ -21,19 +21,22 @@ export const OptionsForm = ({onOptionsChange}) => {
     const handleFetchOptions = async () => {
       try {
         const data = await fetchOptions();
-     
+        console.log("data options", data);
         const transformedOptions = data.map((option) => ({
           value: option.id.toString(), 
           label: capitalizeFirstLetter(option.name),
         }));
-
-        setOptions((prevOptions) => [...prevOptions, ...transformedOptions]);
+  
+        const optionsSet = new Set([...options, ...transformedOptions]);
+        setOptions(Array.from(optionsSet));
       } catch (error) {
         console.error("Error fetching options:", error);
       }
     };
     handleFetchOptions();
   }, []);
+  
+  
 
   return (
     <>

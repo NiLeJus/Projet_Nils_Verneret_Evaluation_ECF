@@ -14,6 +14,7 @@ import VehicleConditionForm from "../components/vehicleRelated/vehicleForm/keyIn
 import { FormGroup } from "react-bootstrap";
 import { addNewVehicle } from "../serverRelated/ApiRequest.js";
 import { Button } from "react-bootstrap";
+import { useNavigate} from 'react-router-dom';
 
 export const VehicleDetailsForm = () => {
   const [vehicleId, setVehicleId] = useState(null); // Pour stocker l'ID du véhicule ajouté
@@ -21,7 +22,7 @@ export const VehicleDetailsForm = () => {
   const [selectedModel, setSelectedModel] = useState(null);
   const [selectedTransmission, setSelectedTransmission] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
-
+  const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
 
   const [vehicleData, setVehicleData] = useState({
@@ -197,19 +198,32 @@ export const VehicleDetailsForm = () => {
       console.error("Tous les champs obligatoires doivent être remplis");
       return;
     }
+    console.log(vehicleData.Vehicle.Options)
+
     try {
       const response = await addNewVehicle(vehicleData);
       if (response && response.id) {
         const newVehicleId = response.id;
         setVehicleId(newVehicleId);
+        console.log(newVehicleId)
         handleRegisterRelOptionsVehicles(
           newVehicleId,
           vehicleData.Vehicle.Options
         );
+        
         handleSendPhotos(newVehicleId);
+        console.log("response.ok", response.ok )
+
+        if (response.ok) {
+          navigate('/admin')
+        }
+  
       } else {
         console.error("Réponse inattendue de l'API", response);
       }
+
+
+
     } catch (error) {
       console.error("Erreur lors de l'ajout du véhicule:", error);
     }

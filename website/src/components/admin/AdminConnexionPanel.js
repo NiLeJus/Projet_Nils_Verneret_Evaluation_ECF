@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import useAuthToken from "../../functions/useAuthToken"; 
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../../serverRelated/ApiRequest";
 
 export const AdminConnexionPanel = ({ show, onHide }) => {
   const navigate = useNavigate();
+  const isValidToken = useAuthToken(); 
 
   const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState(""); 
+
+  // Effectuer une redirection si l'utilisateur est déjà authentifié ET si le panneau est affiché
+  useEffect(() => {
+    if (isValidToken && show) {
+      navigate("/admin");
+      onHide();
+    }
+  }, [isValidToken, navigate, show, onHide]); 
+
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     try {
@@ -21,21 +32,21 @@ export const AdminConnexionPanel = ({ show, onHide }) => {
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json(); 
+
       if (response.ok) {
+        localStorage.setItem('token', data.token); // Stock le token JWT dans le stockage local
         navigate("/admin");
         onHide();
-
       } else {
         console.error("Erreur de connexion");
       }
     } catch (error) {
-      console.error(
-        "Erreur de connexion : ",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Erreur de connexion : ", error);
     }
   };
 
+  
   return (
     <Modal
       show={show}
@@ -79,15 +90,10 @@ export const AdminConnexionPanel = ({ show, onHide }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={onHide}
-        >
-          {" "}
-          Fermer{" "}
-        </Button>
+        <Button variant="secondary" onClick={onHide}> Fermer </Button>
       </Modal.Footer>
     </Modal>
   );
 };
+
 export default AdminConnexionPanel;

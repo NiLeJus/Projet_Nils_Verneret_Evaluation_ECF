@@ -1,9 +1,9 @@
 import React from 'react';
 import StarsIcons from '../components/general/StarsIcons';
 
-// ratingStars.js
 function ratingStars(rating) {
   console.log(rating)
+
   // Fonction pour calculer les étoiles en fonction du rating
   const calculateStars = (rating) => {
     const fullStars = Math.floor(rating);
@@ -15,7 +15,6 @@ function ratingStars(rating) {
 
   const { fullStars, hasHalfStar, emptyStars } = calculateStars(rating);
 
-  // Génère les étoiles en utilisant les composants SVG importés
   const renderStars = () => {
     const stars = [];
 
@@ -30,7 +29,6 @@ function ratingStars(rating) {
     for (let i = 0; i < emptyStars; i++) {
       stars.push(<StarsIcons.Empty className="star-icon" key={`empty${i}`} />);
     }
-    console.log(stars)
     return stars;
   };
 

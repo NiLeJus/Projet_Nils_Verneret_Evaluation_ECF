@@ -11,11 +11,6 @@ import {ReactComponent as Painting}  from '../../visuals/SVG/paint-brush.svg';
 import {ReactComponent as Factory}  from '../../visuals/SVG/industry.svg';
 import {ReactComponent as HorsePower}  from '../../visuals/SVG/horse-power.svg';
 
-
-
-
-
-
 const Icons = {
     Transmission,
     Key,

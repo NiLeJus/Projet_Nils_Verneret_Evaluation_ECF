@@ -125,7 +125,7 @@ const AddColorModal = ({ show, onHide, onModalClose }) => {
         <Row>
           <CreatableSelect
             value={selectedColor}
-            onChange={handleColorChange} // Utilisez la nouvelle fonction pour gérer le changement
+            onChange={handleColorChange} 
             options={colors}
             isSearchable
             components={{ Option: ColorOption }}

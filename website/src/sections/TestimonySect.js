@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchDisplayedTestimonials } from "../serverRelated/ApiRequest";
 import { handleDateDifference } from "../functions/handleDateDifference";
 import ratingStars from "../functions/ratingStars"; // Importez la fonction, pas le composant React
 import Container from "react-bootstrap/Container";
+
+import { fetchDisplayedTestimonials } from "../serverRelated/ApiRequest";
 
 export const TestimonySect = () => {
   const [testimonials, setTestimonials] = useState([]);
@@ -29,7 +30,6 @@ export const TestimonySect = () => {
         <Container className="p-5">
           {testimonials.map(
             (testimony, index) => (
-              console.log(testimony.note),
               (
                 <div
                   key={index}

@@ -19,13 +19,17 @@ router.get("/", async (req, res) => {
         });
         res.json(requests);
     } catch (error) {
-        res.status(500).send(error.message);
+      res.status(500).send(error.message);
     }
 }
 );
 
 //Ajouter
 router.post('/', async (req, res) => {
+  if (req.body.honeyPot) {
+    console.log('Tentative de soumission détectée par un bot.');
+    return res.status(201).json({message: "Traitée comme une soumission valide par un bot."});
+}
     try {
       const newRequest = await Request.create(req.body);
       res.status(201).json(newRequest);

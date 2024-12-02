@@ -23,7 +23,7 @@ export const ServiceList = () => {
       <Row>
         {services.map((service) => (
           <Col key={service.id} lg={3} md={6} sm={12} className="mb-4">
-            <ServiceCard service={service} /> {/* Utilisation de votre composant ServiceCard */}
+            <ServiceCard service={service} />
           </Col>
         ))}
       </Row>

@@ -47,8 +47,10 @@ export const FuelForm = ({ onFuelChange }) => {
   }, []);
 
   const handleFuelChange = (selectedOption) => {
-    onFuelChange(selectedOption.value);
+    setSelectedFuelType(selectedOption); 
+    onFuelChange(selectedOption.value); 
   };
+  
 
   return (
     <>

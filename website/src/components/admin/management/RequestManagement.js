@@ -21,7 +21,6 @@ export const RequestManagement = () => {
         if (!a.is_processed && b.is_processed) return -1;
         if (a.is_processed && !b.is_processed) return 1;
 
-        // Ensuite, trier par date (la plus récente en premier)
         return new Date(b.received_at) - new Date(a.received_at);
       });
       setRequests(sortedData);
@@ -67,9 +66,6 @@ export const RequestManagement = () => {
     <div className="bg-dark align-content-center">
         <h1 className="text-light">Gérer les demandes</h1>
       </div>
-      
-
-
         <Table
           striped
           bordered
@@ -77,7 +73,7 @@ export const RequestManagement = () => {
         >
           <thead>
             <tr>
-              <th>Reçu il y a</th>
+              <th>Reçu le</th>
               <th>Statut</th>
               <th>Request ref</th>
               <th>Nom du client</th>

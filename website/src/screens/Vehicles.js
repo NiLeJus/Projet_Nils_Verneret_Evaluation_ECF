@@ -3,10 +3,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-// importing Components
+import { Helmet } from "react-helmet";
+
 import VehicleFilters from "../components/vehicleRelated/VehicleFilters.js";
 import VehiclesCardrousel from "../sections/VehiclesCardrousel.js";
-import { VehicleSearchResult } from "../components/vehicleRelated/VehicleSearchResult.js";
 
 export const Vehicles = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -28,8 +28,20 @@ export const Vehicles = () => {
   };
 
   return (
-    <main style={{height: `${cardrouselHeight * 1.5}px`}}>
-      <VehicleSearchResult  />
+    <>
+     <Helmet>
+        <title>Nos véhicules</title>
+        <meta
+          name="description"
+          content="Découvrez nos véhicules"
+        />
+        <meta charSet="utf-8" />
+        <meta
+          name="keywords"
+          content="garage, voiture"
+        />
+      </Helmet>
+    <main style={{height: `${cardrouselHeight * 1.01}px`}}>
       <div
         className="bg-dark p-2"
         style={{ height: "25px" }}
@@ -55,6 +67,7 @@ export const Vehicles = () => {
         </Col>
       </Row>
     </main>
+    </>
   );
 };
 

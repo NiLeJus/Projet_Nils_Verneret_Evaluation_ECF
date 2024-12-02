@@ -3,9 +3,9 @@ const { Sequelize, DataTypes } = require("sequelize");
 console.log("Starting Sequelize configuration");
 
 // Configuration de Sequelize et connexion à la base de données
-const sequelize = new Sequelize('vparrot_activity_db', 'root', '', {
-    host: 'localhost',
-    dialect: 'mariadb',
+const sequelize = new Sequelize('vparrot_activity_db', 'root', '', { //('nom db', 'user', 'password')
+    host: 'localhost', //Hébergement de la base de donnée
+    dialect: 'mariadb', 
 });
 
 
@@ -30,6 +30,8 @@ const Photo = require("../models/photos")(sequelize, DataTypes); console.log("Ph
 const RelVehiclesOptions = require("../models/relVehiclesOptions")(sequelize, DataTypes); console.log("RelVehiclesOptions model imported");
 const Request = require("../models/requests")(sequelize, DataTypes); console.log("Request model imported");
 const Testimonial = require("../models/testimonials")(sequelize, DataTypes); console.log("Testimonials model imported");
+const Day = require("../models/days")(sequelize, DataTypes); console.log("Day model imported");
+const DefaultWeek = require("../models/defaultWeek")(sequelize, DataTypes); console.log("DefaultWeek model imported");
 console.log("All models imported");
 
 // Relations
@@ -41,11 +43,9 @@ console.log("Setting up VehicleModel <-> Brand relationship");
 VehicleModel.belongsTo(Brand, { foreignKey: "brand_id" });
 Brand.hasMany(VehicleModel, { foreignKey: "brand_id" });
 console.log("VehicleModel <-> Brand relationship set up");
-
 //#endregion
 
 //#region Relations vehicles
-
 // Relation Vehicle -> VehicleModel
 console.log("Setting up Vehicle <-> VehicleModel relationship");
 Vehicle.belongsTo(VehicleModel, { foreignKey: 'vehicle_model_id' });
@@ -106,6 +106,8 @@ console.log("Setting up Option <-> Vehicle relationship");
 console.log("Option <-> Vehicle relationship set up");
 //#endregion
 
+//#region Association VehicleModels-VehicleType via RelVehicleModels&VehicleTypes
+
 //#region Relations Photos
 // Relation Vehicle -> Photo
 console.log("Setting up Vehicle <-> Photo relationship");
@@ -120,16 +122,12 @@ console.log("Setting up Vehicle <-> Request relationship");
 Vehicle.hasMany(Request, { foreignKey: "vehicle_id" });
 Request.belongsTo(Vehicle, { foreignKey: "vehicle_id" });
 console.log("Vehicle <-> Request relationship set up");
-
+//#endregion
 console.log("All relationships set up");
 
 // Synchronisation des modèles
 console.log("Syncing models with the database");
 
-// Exporter les modèles pour utilisation dans d'autres fichiers
-
-
-// Synchronisation des modèles (si nécessaire)
 Promise.all([
   Service.sync(),
   VehicleModel.sync(),
@@ -147,15 +145,16 @@ Promise.all([
   Admin.sync(),
   Garage.sync(),
   Testimonial.sync(),
+  Day.sync(),
+  DefaultWeek.sync()
+
 ]).then(() => {
   console.log("All models synced successfully");
 }).catch((error) => {
   console.error("Error syncing models:", error);
 }); 
 
-
 console.log("All models synced successfully");
-
 
 console.log("Exporting models");
 module.exports = {
@@ -174,6 +173,12 @@ module.exports = {
   RelVehiclesOptions,
   Request,
   Testimonial,
-  Garage
+  Garage,
+  Day,
+  DefaultWeek,
+  Sequelize,
+  sequelize
 };
 console.log("Models exported successfully");
+
+

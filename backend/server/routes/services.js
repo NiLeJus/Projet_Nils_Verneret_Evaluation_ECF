@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Service } = require('../scripts/db');
+const authenticateToken = require('../scripts/verifyToken');
 
 // Obtenir tous les services
 router.get('/', async (req, res) => {
@@ -43,7 +44,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Supprimer un service
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const service = await Service.findByPk(req.params.id);
     if (service) {

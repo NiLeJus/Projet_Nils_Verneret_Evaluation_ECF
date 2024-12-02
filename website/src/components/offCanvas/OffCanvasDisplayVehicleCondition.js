@@ -30,7 +30,7 @@ export const OffCanvasDisplayVehicleCondition = ({
         show={showOffcanvasVehicleCondition}
         onHide={handleCloseOffcanvasVehicleCondition}
         scroll={true}
-        backdrop={false}
+        backdrop={true}
         className="bg-dark custom-offcanvas"
       >
         <Offcanvas.Header

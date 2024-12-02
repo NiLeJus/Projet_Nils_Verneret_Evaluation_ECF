@@ -1,11 +1,8 @@
 export function handleDateDifference(isoDate) {
-  console.log(isoDate);
   
   const currentDate = new Date();
-  console.log(currentDate);    
 
   const parsedDate = new Date(isoDate);
-  console.log(parsedDate);    
 
   const timeDifference = currentDate - parsedDate;
   const secondsDifference = Math.floor(timeDifference / 1000);

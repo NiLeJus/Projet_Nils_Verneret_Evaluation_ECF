@@ -3,14 +3,10 @@ import { Accordion } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { capitalizeFirstLetter } from "../../functions/capitalizeFirstLetter";
-import { fetchBrands, fetchVehicleModels, fetchVehicleTypes } from "../../serverRelated/ApiRequest";
+import { fetchBrands, fetchVehicleModels, fetchVehicleTypes, getVehicleCounts } from "../../serverRelated/ApiRequest";
 
 const VehicleFilters = ({ setSelectedBrands, setSelectedModels, setSelectedTypes }) => {
 
-
-  
-  
-  
   const [filters, setFilters] = useState({
     brands: [],
     vehicleModels: [],
@@ -20,35 +16,42 @@ const VehicleFilters = ({ setSelectedBrands, setSelectedModels, setSelectedTypes
   useEffect(() => {
     const initFilters = async () => {
       try {
-        const brandsData = await fetchBrands();
-        const vehicleModelsData = await fetchVehicleModels();
-        const vehicleTypesData = await fetchVehicleTypes();
+        const { brandsCount, modelsCount, typesCount } = await getVehicleCounts();
+
         setFilters({
-          brands: brandsData,
-          vehicleModels: vehicleModelsData,
-          vehicleTypes: vehicleTypesData,
+          brands: brandsCount,
+          vehicleModels: modelsCount,
+          vehicleTypes: typesCount,
         });
+
+        console.log(brandsCount, modelsCount, typesCount);
       } catch (error) {
         console.error("Erreur lors de l'initialisation des filtres:", error);
       }
     };
+
     initFilters();
   }, []);
 
   const renderFilterOptions = (filterOptions, labelKey, handleChange) => (
-    filterOptions.map((option, index) => {
-      const label = typeof option === 'string' ? option : option[labelKey] || '';
-      return (
-        <Form.Check
-          key={index}
-          label={`${capitalizeFirstLetter(label)}`}
-          value={label}
-          className="text-light"
-          onChange={handleChange}
-        />
-      );
-    })
+    filterOptions
+      .filter(option => option.vehicleCount > 0) // Filtrer les options où vehicleCount est supérieur à 0
+      .map((option, index) => {
+        const label = typeof option === 'string' ? option : option[labelKey] || '';
+        const vehicleCount = option.vehicleCount; // Pas besoin de définir une valeur par défaut ici puisque nous avons déjà filtré les options
+        return (
+          <Form.Check
+            key={index}
+            label={`${capitalizeFirstLetter(label)} (${vehicleCount})`} // Afficher le nom et le nombre de véhicules
+            value={label}
+            className="text-light"
+            onChange={handleChange}
+          />
+        );
+      })
   );
+  
+  
 
   const handleBrandChange = (event) => {
     const brand = event.target.value;

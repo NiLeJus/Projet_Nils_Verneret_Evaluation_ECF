@@ -3,7 +3,7 @@ import { NavLink, Col } from "react-bootstrap";
 import { AdminConnexionPanel } from "../admin/AdminConnexionPanel";
 import { fetchGarage } from '../../serverRelated/ApiRequest';
 import { ReactComponent as Logo } from "../../visuals/brand/LOGO_FULL_LIGHT.svg";
-
+import FooterSchedule from "./FooterSchedule";
 
 export const FooterComp = () => {
   const [garage, setGarage] = useState({});
@@ -26,9 +26,12 @@ export const FooterComp = () => {
   const handleCloseConnexionModal = () => setShowConnexionModal(false);
 
   return (
-    <div className="text-center text-light p-3"> 
-    <Logo className="home-logo mb-5" />
-      <span className="adress-p">
+    <div className="text-center text-light p-3 mt-5"> 
+    <Logo className="home-logo mb-5 mt-5" />
+    <FooterSchedule 
+  />
+
+      <span className="adress-p mt-1">
       <p className="mb-1">{garage.address}</p>
       <p className="mb-1">{garage.city}</p>
       <p className="mb-5">{garage.zip_code}</p>
